@@ -44,10 +44,11 @@ void fifo_hit(struct cache *c, unsigned int to_find) {
  */
 int lru_miss(struct cache *c, unsigned int to_insert) {    
     struct list *l = c -> entries;
-    int len = list_length(l);
     list_append(l, to_insert);
+    int len = list_length(l);
+
     if(len > c -> capacity){
-        return (list_pop(l, len - 1));
+        return (list_pop(l, 0));
     }
     return EVICT_NONE;
 }
@@ -60,7 +61,7 @@ int lru_miss(struct cache *c, unsigned int to_insert) {
  */
 void lru_hit(struct cache *c, unsigned int to_find) {    
     struct list *l = c -> entries;
-    list_prepend(l ,list_pop(l, list_index(l, to_find)));
+    list_append(l ,list_pop(l, list_index(l, to_find)));
     return;
 }
 
